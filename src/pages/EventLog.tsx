@@ -368,11 +368,27 @@ const EventLog = () => {
       try {
         const policy = filteredPolicies.find((p) => String(p.id) === selectedPolicy);
         const policyTypeId = policy?.policyTypeId ?? selectedPolicy;
-        const data = await timeOffClientService.getEvents(String(policyTypeId), {
-          userId: selectedUser.id,
-          limit: 100,
-        });
-        const items = data.items || data.data || data.events || [];
+        // Fetch all events with pagination to get full history
+        let allItems: any[] = [];
+        let page = 1;
+        const pageSize = 200;
+        let hasMore = true;
+        while (hasMore) {
+          const data = await timeOffClientService.getEvents(String(policyTypeId), {
+            userId: selectedUser.id,
+            limit: pageSize,
+            page,
+          });
+          const pageItems = data.items || data.data || data.events || [];
+          allItems = allItems.concat(pageItems);
+          // Stop if we got fewer items than the page size (last page) or after 5 pages max
+          if (pageItems.length < pageSize || page >= 5) {
+            hasMore = false;
+          } else {
+            page++;
+          }
+        }
+        const items = allItems;
 
         // Sort by ID ascending (creation order)
         items.sort((a: any, b: any) => (a.id || 0) - (b.id || 0));
@@ -545,7 +561,7 @@ const EventLog = () => {
             runningBalance: Math.round(runningBalance * 100) / 100,
             vacationRange,
             cyclePeriod,
-            year: extractYear(displayDateStr),
+            year: extractYear(ev.date || displayDateStr),
             typeCategory: getTypeCategory(ev.type || ''),
           };
         });

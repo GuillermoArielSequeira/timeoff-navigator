@@ -11,35 +11,26 @@ import {
   CircularProgress,
 } from '@mui/material';
 import {
-  Science as SandboxIcon,
-  Timeline as TimelineIcon,
   ListAlt as LogIcon,
   Assessment as ReportsIcon,
-  Public as TemplatesIcon,
   SmartToy as AiIcon,
+  TuneRounded as PolicyIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { timeOffAdminService } from '../services/timeOffService';
 
-const features = [
+const heroFeature = {
+  title: 'Gestor de Políticas',
+  description: 'Creá y editá políticas con un copiloto de IA que te guía paso a paso y simula el impacto en saldos.',
+  icon: <PolicyIcon sx={{ fontSize: 40 }} />,
+  path: '/laboratory',
+  color: '#496BE3',
+};
+
+const secondaryFeatures = [
   {
-    title: 'Sandbox de Políticas',
-    description: 'Simulá cambios en políticas y visualizá el impacto en saldos antes de aplicarlos.',
-    icon: <SandboxIcon sx={{ fontSize: 40 }} />,
-    path: '/sandbox',
-    color: '#496BE3',
-    priority: 'Prioridad Máxima',
-  },
-  {
-    title: 'Timeline de Eventos',
-    description: 'Visualizá la línea de tiempo de un empleado con eventos pasados y proyectados.',
-    icon: <TimelineIcon sx={{ fontSize: 40 }} />,
-    path: '/timeline',
-    color: '#2DA8A4',
-  },
-  {
-    title: 'Log de Movimientos',
+    title: 'Registro de Movimientos',
     description: 'Consultá el detalle de todos los movimientos de saldo de un empleado.',
     icon: <LogIcon sx={{ fontSize: 40 }} />,
     path: '/log',
@@ -53,20 +44,61 @@ const features = [
     color: '#F0B623',
   },
   {
-    title: 'Templates por País',
-    description: 'Plantillas pre-configuradas para AR, CO, CL, PE, BR y MX.',
-    icon: <TemplatesIcon sx={{ fontSize: 40 }} />,
-    path: '/templates',
-    color: '#1CA332',
-  },
-  {
-    title: 'Chat IA',
-    description: 'Preguntale al agente sobre políticas, simulaciones y mejores prácticas.',
+    title: 'Agente de IA',
+    description: 'Preguntale al agente experto sobre configuración, legislación, saldos y buenas prácticas.',
     icon: <AiIcon sx={{ fontSize: 40 }} />,
     path: '/chat',
     color: '#E74444',
   },
 ];
+
+const FeatureCard = ({
+  feature,
+  navigate,
+}: {
+  feature: typeof heroFeature;
+  navigate: ReturnType<typeof useNavigate>;
+}) => (
+  <Card
+    sx={{
+      height: '100%',
+      position: 'relative',
+      transition: 'transform 0.2s, box-shadow 0.2s',
+      '&:hover': {
+        transform: 'translateY(-4px)',
+        boxShadow: '0 8px 25px rgba(0,0,0,0.12)',
+      },
+    }}
+  >
+    <CardActionArea onClick={() => navigate(feature.path)} sx={{ height: '100%', p: 0 }}>
+      <CardContent sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+          <Box
+            sx={{
+              width: 56,
+              height: 56,
+              borderRadius: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: `${feature.color}15`,
+              color: feature.color,
+            }}
+          >
+            {feature.icon}
+          </Box>
+          {}
+        </Box>
+        <Typography variant="h4" gutterBottom>
+          {feature.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {feature.description}
+        </Typography>
+      </CardContent>
+    </CardActionArea>
+  </Card>
+);
 
 const Home = () => {
   const navigate = useNavigate();
@@ -121,63 +153,16 @@ const Home = () => {
         )}
       </Box>
 
-      {/* Feature Cards */}
+      {/* Hero Card — Gestor de Políticas — full width */}
+      <Box sx={{ mb: 2.5 }}>
+        <FeatureCard feature={heroFeature} navigate={navigate} />
+      </Box>
+
+      {/* Secondary Cards — 3 in a row */}
       <Grid container spacing={2.5}>
-        {features.map((feature) => (
+        {secondaryFeatures.map((feature) => (
           <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={feature.path}>
-            <Card
-              sx={{
-                height: '100%',
-                position: 'relative',
-                transition: 'transform 0.2s, box-shadow 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '0 8px 25px rgba(0,0,0,0.12)',
-                },
-              }}
-            >
-              <CardActionArea
-                onClick={() => navigate(feature.path)}
-                sx={{ height: '100%', p: 0 }}
-              >
-                <CardContent sx={{ p: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                    <Box
-                      sx={{
-                        width: 56,
-                        height: 56,
-                        borderRadius: 2,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        bgcolor: `${feature.color}15`,
-                        color: feature.color,
-                      }}
-                    >
-                      {feature.icon}
-                    </Box>
-                    {feature.priority && (
-                      <Chip
-                        label={feature.priority}
-                        size="small"
-                        sx={{
-                          bgcolor: '#496BE315',
-                          color: '#496BE3',
-                          fontWeight: 600,
-                          fontSize: '0.7rem',
-                        }}
-                      />
-                    )}
-                  </Box>
-                  <Typography variant="h4" gutterBottom>
-                    {feature.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {feature.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
+            <FeatureCard feature={feature as any} navigate={navigate} />
           </Grid>
         ))}
       </Grid>

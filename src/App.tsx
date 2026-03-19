@@ -12,6 +12,8 @@ import Reports from './pages/Reports';
 import Templates from './pages/Templates';
 import Chat from './pages/Chat';
 import Laboratory from './pages/Laboratory';
+import LaboratoryCreate from './pages/LaboratoryCreate';
+import LaboratoryEdit from './pages/LaboratoryEdit';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -52,6 +54,8 @@ function AppRoutes() {
         <Route path="/reports" element={<Reports />} />
         <Route path="/templates" element={<Templates />} />
         <Route path="/laboratory" element={<Laboratory />} />
+        <Route path="/laboratory/create" element={<LaboratoryCreate />} />
+        <Route path="/laboratory/edit" element={<LaboratoryEdit />} />
         <Route path="/chat" element={<Chat />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />

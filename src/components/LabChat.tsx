@@ -8,8 +8,14 @@ import {
   Avatar,
   Chip,
   CircularProgress,
+  Button,
+  Collapse,
 } from '@mui/material';
-import { Send as SendIcon, SmartToy as AiIcon } from '@mui/icons-material';
+import {
+  Send as SendIcon,
+  SmartToy as AiIcon,
+  Lightbulb as SuggestionsIcon,
+} from '@mui/icons-material';
 
 export interface ChatMessageDisplay {
   role: 'user' | 'assistant';
@@ -39,10 +45,16 @@ const EDIT_SUGGESTIONS = [
 
 const LabChat = ({ messages, onSendMessage, isLoading, mode }: LabChatProps) => {
   const [input, setInput] = useState('');
+  const [showSuggestionsPanel, setShowSuggestionsPanel] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Scroll only inside the messages container, not the whole page
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   }, [messages, isLoading]);
 
   const handleSend = () => {
@@ -60,16 +72,17 @@ const LabChat = ({ messages, onSendMessage, isLoading, mode }: LabChatProps) => 
   };
 
   const suggestions = mode === 'create' ? CREATE_SUGGESTIONS : EDIT_SUGGESTIONS;
-  const showSuggestions = messages.length <= 1;
+  const isFirstMessage = messages.length <= 1;
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: 'calc(100vh - 220px)', minHeight: 500, display: 'flex', flexDirection: 'column' }}>
       <Typography variant="h3" sx={{ mb: 2, flexShrink: 0 }}>
-        🤖 Copiloto de Configuración
+        Copiloto de Configuración
       </Typography>
 
       {/* Messages */}
       <Box
+        ref={messagesContainerRef}
         sx={{
           flex: 1,
           overflow: 'auto',
@@ -125,11 +138,11 @@ const LabChat = ({ messages, onSendMessage, isLoading, mode }: LabChatProps) => 
           </Box>
         )}
 
-        <div ref={messagesEndRef} />
+        <div ref={messagesEndRef} style={{ flexShrink: 0 }} />
       </Box>
 
-      {/* Suggestions */}
-      {showSuggestions && (
+      {/* Suggestions — always visible on first message, toggleable after */}
+      {isFirstMessage ? (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 1.5 }}>
           {suggestions.map((s) => (
             <Chip
@@ -141,6 +154,34 @@ const LabChat = ({ messages, onSendMessage, isLoading, mode }: LabChatProps) => 
               sx={{ cursor: 'pointer', fontSize: '0.75rem' }}
             />
           ))}
+        </Box>
+      ) : (
+        <Box sx={{ mb: 1 }}>
+          <Button
+            size="small"
+            startIcon={<SuggestionsIcon />}
+            onClick={() => setShowSuggestionsPanel(!showSuggestionsPanel)}
+            sx={{ textTransform: 'none', fontSize: '0.8rem', color: 'text.secondary' }}
+          >
+            Sugerencias
+          </Button>
+          <Collapse in={showSuggestionsPanel}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
+              {suggestions.map((s) => (
+                <Chip
+                  key={s}
+                  label={s}
+                  size="small"
+                  variant="outlined"
+                  onClick={() => {
+                    onSendMessage(s);
+                    setShowSuggestionsPanel(false);
+                  }}
+                  sx={{ cursor: 'pointer', fontSize: '0.75rem' }}
+                />
+              ))}
+            </Box>
+          </Collapse>
         </Box>
       )}
 
@@ -170,9 +211,26 @@ const LabChat = ({ messages, onSendMessage, isLoading, mode }: LabChatProps) => 
   );
 };
 
-/** Basic formatting: bold **text** and line breaks */
+/** Strip markdown symbols from Claude responses */
 function formatMessage(text: string): string {
-  return text;
+  return text
+    // Remove headers (## or ### etc)
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove bold **text** or __text__
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    // Remove italic *text* or _text_ (but not inside words)
+    .replace(/(?<!\w)\*(.+?)\*(?!\w)/g, '$1')
+    .replace(/(?<!\w)_(.+?)_(?!\w)/g, '$1')
+    // Remove inline code `text`
+    .replace(/`(.+?)`/g, '$1')
+    // Remove code blocks ```
+    .replace(/```[\s\S]*?```/g, (match) => match.replace(/```\w*\n?/g, '').replace(/```/g, '').trim())
+    // Replace markdown list dashes with bullet
+    .replace(/^- /gm, '• ')
+    // Clean up extra blank lines
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 export default LabChat;

@@ -30,7 +30,7 @@ import {
   Menu as MenuIcon,
   ChevronLeft as CollapseIcon,
   ChevronRight as ExpandIcon,
-  Biotech as LabIcon,
+  TuneRounded as PolicyIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -39,13 +39,13 @@ const DRAWER_COLLAPSED_WIDTH = 72;
 
 const navItems = [
   { label: 'Home', icon: <HomeIcon />, path: '/' },
-  { label: 'Sandbox de Políticas', icon: <SandboxIcon />, path: '/sandbox' },
-  { label: 'Timeline de Eventos', icon: <TimelineIcon />, path: '/timeline' },
-  { label: 'Log de Movimientos', icon: <LogIcon />, path: '/log' },
+  { label: 'Gestor de Políticas', icon: <PolicyIcon />, path: '/laboratory' },
+  { label: 'Registro de Movimientos', icon: <LogIcon />, path: '/log' },
   { label: 'Auditoría de Saldos', icon: <ReportsIcon />, path: '/reports' },
-  { label: 'Templates por País', icon: <TemplatesIcon />, path: '/templates' },
-  { label: 'Laboratorio', icon: <LabIcon />, path: '/laboratory' },
-  { label: 'Chat IA', icon: <AiIcon />, path: '/chat' },
+  { label: 'Agente de IA', icon: <AiIcon />, path: '/chat' },
+  // { label: 'Sandbox de Políticas', icon: <SandboxIcon />, path: '/sandbox' },
+  // { label: 'Timeline de Eventos', icon: <TimelineIcon />, path: '/timeline' },
+  // { label: 'Templates por País', icon: <TemplatesIcon />, path: '/templates' },
 ];
 
 const Layout = () => {
@@ -106,7 +106,7 @@ const Layout = () => {
       {/* Nav Items */}
       <List sx={{ flex: 1, py: 1 }}>
         {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = item.path === '/' ? location.pathname === '/' : location.pathname.startsWith(item.path);
           return (
             <Tooltip
               key={item.path}
@@ -171,14 +171,7 @@ const Layout = () => {
         </IconButton>
       </Box>
 
-      {/* Footer */}
-      {!collapsed && (
-        <Box sx={{ px: 2, pb: 2 }}>
-          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center' }}>
-            Powered by Claude AI + Humand API
-          </Typography>
-        </Box>
-      )}
+      {/* Footer removed for cleaner UI */}
     </Box>
   );
 
