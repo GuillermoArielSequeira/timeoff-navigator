@@ -15,7 +15,6 @@ import {
 import {
   Download as DownloadIcon,
   Circle as DotIcon,
-  RadioButtonUnchecked as FutureDotIcon,
 } from '@mui/icons-material';
 import { timeOffClientService } from '../services/timeOffService';
 

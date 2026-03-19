@@ -19,11 +19,8 @@ import {
   Tooltip,
 } from '@mui/material';
 import {
-  Science as SandboxIcon,
-  Timeline as TimelineIcon,
   ListAlt as LogIcon,
   Assessment as ReportsIcon,
-  Public as TemplatesIcon,
   SmartToy as AiIcon,
   Home as HomeIcon,
   Logout as LogoutIcon,

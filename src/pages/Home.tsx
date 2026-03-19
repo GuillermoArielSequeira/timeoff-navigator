@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardActionArea,
-  Chip,
   Alert,
   CircularProgress,
 } from '@mui/material';

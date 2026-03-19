@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -11,7 +11,6 @@ import {
 import { ArrowBack as BackIcon } from '@mui/icons-material';
 import LabChat from '../components/LabChat';
 import LabConfigForm from '../components/LabConfigForm';
-import type { SimEmployee } from '../components/LabConfigForm';
 import type { ChatMessageDisplay } from '../components/LabChat';
 import {
   sendMessage as sendClaudeMessage,

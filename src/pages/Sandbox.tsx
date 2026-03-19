@@ -13,7 +13,6 @@ import {
   Alert,
   Paper,
   CircularProgress,
-  Switch,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -23,7 +22,6 @@ import {
 import {
   PlayArrow as SimulateIcon,
   RestartAlt as ResetIcon,
-  SmartToy as AiIcon,
 } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 import { timeOffAdminService, timeOffClientService } from '../services/timeOffService';

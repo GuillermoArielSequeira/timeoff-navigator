@@ -132,7 +132,7 @@ const LaboratoryEdit = () => {
     apiMessagesRef.current = [];
 
     try {
-      const policy = await timeOffAdminService.getPolicy(policyId);
+      const policy = await timeOffAdminService.getPolicy(String(policyId));
       const activityPeriod = ALLOWANCE_START_TO_ACTIVITY_PERIOD[policy.allowanceStart] || policy.activityPeriod || 'JAN_DEC';
       const apiTiers: any[] = policy.yearsOfService || policy.seniorityTiers || policy.policyType?.yearsOfService || [];
       const seniorityTiers = apiTiers.map((t: any) => ({
