@@ -108,6 +108,26 @@ const Login = () => {
               {loading ? <CircularProgress size={24} color="inherit" /> : 'Ingresar'}
             </Button>
           </Box>
+
+          {/* Demo credentials hint */}
+          <Box
+            sx={{
+              mt: 3,
+              p: 2,
+              borderRadius: 2,
+              bgcolor: '#F0F4FF',
+              border: '1px dashed #496BE3',
+            }}
+          >
+            <Typography variant="caption" color="primary.main" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
+              Credenciales de prueba
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.8 }}>
+              Email: <strong>guillermo.sequeira@humand.co</strong>
+              <br />
+              Contraseña: <strong>hola1234</strong>
+            </Typography>
+          </Box>
         </CardContent>
       </Card>
     </Box>
