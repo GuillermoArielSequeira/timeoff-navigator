@@ -112,4 +112,16 @@ export const timeOffAdminService = {
     const { data } = await backofficeApi.get('/vacations/conflicts', { params });
     return data;
   },
+
+  // Create a new policy
+  async createPolicy(body: Record<string, unknown>) {
+    const { data } = await backofficeApi.post('/vacations/policies', body);
+    return data;
+  },
+
+  // Update an existing policy
+  async updatePolicy(policyId: string, body: Record<string, unknown>) {
+    const { data } = await backofficeApi.put(`/vacations/policies/${policyId}`, body);
+    return data;
+  },
 };

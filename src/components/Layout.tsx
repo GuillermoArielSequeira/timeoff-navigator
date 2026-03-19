@@ -30,6 +30,7 @@ import {
   Menu as MenuIcon,
   ChevronLeft as CollapseIcon,
   ChevronRight as ExpandIcon,
+  Biotech as LabIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -43,6 +44,7 @@ const navItems = [
   { label: 'Log de Movimientos', icon: <LogIcon />, path: '/log' },
   { label: 'Auditoría de Saldos', icon: <ReportsIcon />, path: '/reports' },
   { label: 'Templates por País', icon: <TemplatesIcon />, path: '/templates' },
+  { label: 'Laboratorio', icon: <LabIcon />, path: '/laboratory' },
   { label: 'Chat IA', icon: <AiIcon />, path: '/chat' },
 ];
 
